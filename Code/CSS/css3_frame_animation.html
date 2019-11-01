@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layout</title>
+    <style>
+        /* 清除浏览器默认样式 */
+        html * {
+            padding: 0;
+            margin: 0;
+        }
+        .case {
+            margin: 50px;
+            position: relative;
+            /* 保证 case 不相互影响， 并且内容和外部环境无关 */
+            float: left;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="case">
+        <style>
+            .sprite1 {
+                width: 300px;
+                height: 300px;
+                background: url(../images/frame.png);
+                animation: frameAnimation1 400ms steps(20) both infinite;
+                animation-play-state: running;
+            }
+
+            /* .sprite1:hover{
+                border: solid 2px red;
+                animation-play-state: paused;
+            } */
+
+            @keyframes frameAnimation1 {
+                0% { background-position: 0, 0; }
+                100% { background-position: -6000px 0; }
+            }
+        </style>
+        <div class="sprite1"></div> 
+    </div>
+    <div class="case">
+        <style>
+            .sprite-wv {
+                width: 300px;
+                height: 300px;
+                overflow: hidden;
+            }
+            .sprite2 {
+                width: 6000px;
+                height: 300px;
+                will-change: transform;
+                background: url(../images/frame.png);
+                animation: frameAnimation2 400ms steps(20) both infinite;
+            }
+            @keyframes frameAnimation2 {
+                0% { transform: translate3d(0, 0, 0); }
+                100% { transform: translate3d(-6000px, 0, 0); }
+            }
+        </style>
+        <div class="sprite-wv">
+            <div class="sprite2"></div>
+        </div>
+    </div>
+</body>
+</html>

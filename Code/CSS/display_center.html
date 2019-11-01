@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CSS盒模型 BFC IFC</title>
+    <style>
+        html * {
+            padding: 0;
+            margin: 0;
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- 解决父子元素 margin height塌陷问题，也叫垂直方向margin重叠-->
+    <div id="sec1">
+        <style>
+            #sec1 {
+                background: red;
+            }
+            #sec1>.child {
+                height: 100px;
+                margin-top: 10px;
+                background: yellow;
+            }
+        </style>
+        <div class="child">父子元素margin重叠，父元素高度塌陷</div>
+    </div>
+    <!-- 解决相邻兄弟元素margin height 塌陷问题： -->
+    <div id="sec2">
+        <style>
+            #sec2 {
+                background: green;
+                /* overflow: hidden; */
+            }
+            #sec2 .child {
+                height: 100px;
+                /* width: 100px; */
+                margin: 10px auto 20px;
+                background: pink;
+                /* display: inline-block; */
+            }
+        </style>
+        <div class="child"></div>
+        <!-- 给每一个兄弟元素包裹一个父元素，设置这个父元素的BFC -->
+        <div style="overflow:hidden">
+            <div class="child"></div>
+        </div>
+        <div class="child"></div>
+    </div>
+    <!-- BFC不与float重叠 -->
+    <section id="layout">
+        <style>
+            #layout {
+                background: red;
+            }
+            #layout>.left {
+                float: left;
+                width: 100px;
+                height: 100px;
+                background: blue;
+            }
+            #layout>.right {
+                height: 110px;
+                background: #ccc;
+            }
+        </style>
+        <div class="left"></div>
+        <div class="right"></div>
+    </section>
+</body>
+</html>

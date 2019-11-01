@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layout</title>
+    <style>
+        html * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <style>
+            .left1 {
+                float: left;
+                width: 300px;
+                height: 100px;
+                background: red;
+            }
+
+            .right1 {
+                float: right;
+                width: 300px;
+                height: 100px;
+                background: green;
+            }
+
+            /* .middle1 {
+                height: 100px;
+                background: yellow;
+            } */
+
+            /* 若题目中说中间height高度不定呢 */
+            .middle1 {
+                /* height: 100px; */
+                background: yellow;
+                /* 给块级元素创建BFC */
+                overflow: auto;
+            }
+        </style>
+        <div class="left1"></div>
+        <div class="right1"></div>
+        <div class="middle1">
+            <p>
+                浮动布局解决方案:
+                class等于middle的块级元素必须放到最后才能实现自适应的三栏布局。
+                中间必须自适应的关键技术在于把middle放到布局的最后，且不设置宽度。
+                利用块级元素会自动100%填充父容器宽度的原理来实现。
+                缺点：中间的内容区域是最后被渲染出来的。
+                浮动布局解决方案:
+                class等于middle的块级元素必须放到最后才能实现自适应的三栏布局。
+                中间必须自适应的关键技术在于把middle放到布局的最后，且不设置宽度。
+                利用块级元素会自动100%填充父容器宽度的原理来实现。
+                缺点：中间的内容区域是最后被渲染出来的。
+                浮动布局解决方案:
+                class等于middle的块级元素必须放到最后才能实现自适应的三栏布局。
+                中间必须自适应的关键技术在于把middle放到布局的最后，且不设置宽度。
+                利用块级元素会自动100%填充父容器宽度的原理来实现。
+                缺点：中间的内容区域是最后被渲染出来的。
+            </p>
+        </div>
+    </div>
+    <div class="wrapper">
+        <style>
+            /* .middle2 {
+                height: 100px;
+                padding: 0 300px;
+                background: yellow;
+            } */
+            .middle2 {
+                position: absolute;
+                /* 实现绝对定位自适应布局的关键 */
+                left: 300px;
+                right: 300px;
+                background: yellow;
+                /* 让中间栏根据内容撑开 */
+                /* height: 100px; */
+            }
+            .left2 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 300px;
+                height: 100px;
+                background: red;
+            }
+            .right2 {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 300px;
+                height: 100px;
+                background: green;
+            }
+        </style>
+        <div class="middle2">
+            <p>
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+                绝对定位解决方案:
+                优点：让middle内容区域优先显示出来。
+                实现绝对定位三栏布局有两种方案。
+            </p>
+        </div>
+        <div class="left2"></div>
+        <div class="right2"></div>
+    </div>
+    <div class="wrapper flexbox">
+        <style>
+            .wrapper.flexbox {
+                display: flex;
+            }
+            .left3 {
+                width: 300px;
+                background: red;
+            }
+            .middle3 {
+                /* 实现中间栏宽度自适应的关键技术：flex: 1，等价于flex-grow: 1 */
+                flex: 1;
+                background: yellow;
+            }
+            .right3 {
+                width: 300px;
+                background: green;
+            }
+        </style>
+        <div class="left3"></div>
+        <div class="middle3">
+            <p>
+                三栏布局解决方案：
+                第三种：flexbox 解决方案
+            </p>
+        </div>
+        <div class="right3"></div>
+    </div>
+    <div class="wrapper tablebox">
+        <style>
+            .wrapper.tablebox {
+                width: 100%;
+                display: table;
+            }
+            .left4 {
+                display: table-cell;
+                width: 300px;
+                background: red;
+            }
+            .middle4 {
+                display: table-cell;
+                background: yellow;
+            }
+            .right4 {
+                display: table-cell;
+                width: 300px;
+                background: green;
+            }
+        </style>
+        <div class="left4"></div>
+        <div class="middle4">
+            <p>
+                三栏布局解决方案：
+                第四种：表格布局解决方案
+            </p>
+        </div>
+        <div class="right4"></div>
+    </div>
+    <div class="wrapper gridbox">
+        <style>
+            .wrapper.gridbox {
+                width: 100%;
+                display: grid;
+                grid-template-rows: 100px;
+                grid-template-columns: 300px auto 300px;
+            }
+            .left5 {
+                width: 300px;
+                background: red;
+            }
+            .middle5 {
+                background: yellow;
+            }
+            .right5 {
+                background: blue;
+            }
+        </style>
+        <div class="left5"></div>
+        <div class="middle5">
+            <p>
+                三栏布局解决方案：
+                第五种：grid网格布局解决方案
+            </p>
+        </div>
+        <div class="right5"></div>
+    </div>
+</body>
+
+</html>

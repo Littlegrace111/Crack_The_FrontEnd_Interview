@@ -14,7 +14,7 @@ Pain is inevitable, suffering is optional.
 
 ## 前端框架
 > react.js / react-native 
-### React 框架及其周围生态
+### React框架
 [React 框架入坑指南 ](https://github.com/Littlegrace111/Crack_The_FrontEnd_Interview/issues/2)
 
 

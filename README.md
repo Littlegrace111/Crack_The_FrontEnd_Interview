@@ -10,6 +10,7 @@ Pain is inevitable, suffering is optional.
 * [ ] [函数编程之函数作用域](./Javascript/函数编程之函数作用域.md)
 * [ ] [函数编程之this指向](./Javascript/函数编程之this指向.md)
 * [ ] [函数编程之异步编程](./Javascript/函数编程之异步编程.md)
+* [ ] [函数编程之闭包与柯里化]
 
 ### CSS
 

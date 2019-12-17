@@ -1,11 +1,16 @@
-# React 组件间通信方式
+# 深入理解基于React组件的数据流管理及组件间通信方式
+
+## 前言
+基于react数据流解决方案已经是一个老生常谈的问题了，在前端已经是非常成熟的领域了。然而，作为一个技术人员，知其然，必须知其所以然，在理解**what to do**，到达**how to do**，必须进入到**why to do**的领地，才能充分理解前端诸多框架本身。否则，在不知道开发的应用是如何工作的情况下，很容易给项目带来低质量的代码，影响项目的可维护性和稳定性。
+
 
 ## 父子组件通信
-父组件向子组件传递数据：通过props属性来传递，子组件通过this.props来读取；
-子组件向父组件传递数据：通过间接调用父组件的方法来传递， this.props.XXX();
+父组件向子组件传递数据：通过props属性来传递，子组件通过`this.props.data`来读取；
+子组件向父组件传递数据：子组件通过传递参数给父组件props绑定的方法来向父组件传递数据，`this.props.Func(data1, data2, ...)`;
 
 ## 使用React提供的context
-Context是React提供的一种组件树”全局“通信方式。
+Context是React提供的一种组件树”全局“通信方式。从v16.3.0开始，React开始提供官方的context接口；
+一个使用react context api例子：https://codesandbox.io/s/react-context-api-demo-vz8vm
 
 ### React.createContext
 每个Context对象包含一个Provider的React组件，允许consumer组件来订阅context的改变。
@@ -13,9 +18,14 @@ Context是React提供的一种组件树”全局“通信方式。
 const AppContext = React.createContext();
 ```
 
-### Context的Provider与Consumer
-Context的Provider接受一个value属性来传递参数。当value的属性发生变化时，所有作为Provider后代的consumer组件都会被重新渲染。
-并且不受`shouldComponentUpdate`方法的约束。
+```js
+const { Provider, Consumer } = React.createContext(defaultValue);
+```
+
+### Provider组件
+Context的Provider接受一个value属性来传递参数。**当value的属性发生变化时，所有作为Provider后代的consumer组件都会被重新渲染。
+并且不受`shouldComponentUpdate`方法的约束。**
+
 ```js
 <AppContext.Provider value={{
     state: this.state,
@@ -26,17 +36,20 @@ Context的Provider接受一个value属性来传递参数。当value的属性发�
 </AppContext.Provider>
 ```
 
-### 高阶组件重构Consumer
+### Consumer组件
+使用高阶组件重构Consumer组件；
 ```js
 const WithContext = (Component) => {
     // 返回一个functional的组件
     return (props) => (
         <AppContext.Consumer>
-            {({ state, actions }) => {
-                return <Component {...props} 
-                            data={ state } 
-                            actions={ actions } />
-            }}
+            {
+                ({ state, actions }) => {
+                    return <Component {...props} 
+                                data={ state } 
+                                actions={ actions } />
+                }
+            }
         </AppContext.Consumer>
     )
 }
@@ -71,7 +84,7 @@ store是一个对象，代表**单一数据源且是只读的**，action是一�
 #### createStore
 `store`实例对象可以通过`createStore()`方法创建，接受三个参数：(后两个参数非必须)
 1. reducer: 经过`combineReducers`合并的`reducer`;
-2. preloadedState: `state`的初始状态;
+2. preloadedState: `state`的初始状态；
 3. enhancer: 改变`dispatch`的中间件；
     > enhancer 是一个组合store creator的高阶函数，返回一个新强化过的store creator。
 
@@ -142,12 +155,62 @@ export default store;
 
 `combineReducer`函数用于合并reducer账本。
 
-### Redux 中间件
+## Redux 中间件
 
-#### Redux-thunk
+### React-Redux数据流
+React-Redux 将所有组件分成两大类：UI组件（presentational component）和容器组件（container component）;
+- UI 组件
+1. 只负责UI的呈现，不带有任何业务逻辑；
+2. 没有状态（即不使用this.state这个变量），所有数据都有参数this.props提供；
+3. 不使用任何Redux的API；
 
-#### Redux-saga
+- 容器组件
+1. 容器组件：负责管理数据和业务逻辑，不负责UI的呈现；
+2. 带有内部状态；
+3. 使用Redux的API；
+
+如果一个组件既有UI又有业务逻辑，将它拆分成下面的结构：外面是一个容器组件，里面包了一个UI组件。前者负责与外部通信，将数据传递给后者，由后者渲染出视图。React-Redux规定，所有UI组件都由用户提供，容器组件是由React_Redux自动生成。
+
+>react-redux 7.x 全面拥抱hooks，并且重新回到了基于Subscriptions的实现。使得react-redux 7.x 彻底解决了6.x的性能问题，甚至是所有react-redux中性能最好的。
+
+#### connect()
+```js
+import { connect } from 'react-redux'
+const visibleTodoList = connect(
+    mapStateToProps, // 负责输入逻辑，即将state映射到UI组件的参数props
+    mapDispatchToProps // 负责输出逻辑，即将用户对UI组件的操作映射成Action
+)(TodoList);
+```
+
+1. 输入逻辑：外部的数据（即state对象）如何转换成为UI组件的参数；
+2. 输出逻辑：用户发出的动作如何变为Action对象，从UI组件传递出去；
+3. mapStateToProps会订阅Store，每当state更新的时候，就会自动执行，重新计算UI组件的参数，从而触发UI组件的重新渲染；
+4. mapDispatchToProps用来建立UI组件的参数到store.dispatch方法的映射；
+
+#### Provider组件
+React-Redux提供Provider组件，可以让容器组件拿到state；Provider在根组件外面包了一层，这样一来，App的所有子组件就默认都可以拿到state了。它的原理是react组件的context属性。
+
+```js
+import React, { Component } from 'react';
+import AsyncRoute from './router/';
+import { Provider } from 'react-redux'
+import store from './store'
+
+class App extends Component {
+	render() {
+		return (
+			<Provider store={ store }>
+				<div className="App">
+					<AsyncRoute />
+				</div>
+			</Provider>
+		)
+	}
+}
+```
+
+### Redux-thunk
+
+### Redux-saga
 
 ### Immutable
-
-### React-Redux

@@ -1,9 +1,22 @@
 const Koa = require('koa');
+const Router = require('loa-router');
+
 const app = new Koa();
+const router = new router();
 
-app.use((ctx, next) => {
+router.get('/latest', (ctx, next) => {
+
+});
+
+// router.post
+// router.put
+// router.delete
+
+app.use(async (ctx, next) => {
     console.log(1);
-    next();
+    const a = await next(); // next里面返回的是一个promise
+    console.log(ctx.path);
+    console.log(a);
     console.log(2);
 })
 
@@ -11,30 +24,8 @@ app.use((ctx, next) => {
     console.log(3);
     next();
     console.log(4);
+    return 'hello!';
 })
 
-let middleware = [];
-middleware.push((next) => {
-    console.log(0);
-    next()
-    console.log(1);
-})
-
-middleware.push((next) => {
-    console.log(2);
-    next()
-    console.log(3);
-})
-
-middleware.push(() => {
-    console.log(4);
-})
-
-const compose = (middleware) => {
-    // some code here
-}
-
-
-
-app.listen(3000);
+app.listen(3006);
 

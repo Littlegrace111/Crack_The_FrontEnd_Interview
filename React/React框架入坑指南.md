@@ -74,7 +74,13 @@ JSX -> JS 对象(虚拟dom) -> 真实DOM
 3. state 数据变化，render函数回调（被动更新，无需开发者关注）
 4. 生成新的虚拟Dom
 5. 比较原始虚拟Dom和新的虚拟Dom的区别（React Diff 算法）
-6. 只更新变更的Dom节点的内容
+6. 只更新变更的Dom节点的内容  
+
+### react key和diff机制
+react的组件diff机制是基于Tree Diff策略，对树进行分层比较（dom跨层级移动操作特别少）。对于同一层级的一组节点，它们可以通过唯一id进行区分。
+React只会简单的考虑同层级节点的位置变换，而对于不同层级的节点，只有创建和删除操作；
+
+在开发组件时，保持稳定的DOM结构会有助于性能的提升。
 
 ## React 生命周期 (based on React v15)
 ![react v15的生命周期](../Images/React/react-life-cycle-v15.webp)

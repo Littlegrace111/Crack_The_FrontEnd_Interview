@@ -49,3 +49,21 @@ function compose2(middleware) {
         }
     }
 }
+
+function compose3(middleware) {
+    return function() {
+        let args = arguments;
+        await dispatch(0);
+        async function dispatch(i) {
+            const fn = middleware[i];
+            if(!fn) {
+                return null;
+            } else {
+                await fn(function next() {
+                    dispatch(i + 1);
+                }, ...args);
+            }
+        }
+    }
+}
+

@@ -270,3 +270,21 @@ DvaJS = React-Router + Redux + Redux-saga
 无论是蚂蚁的前端框架，还是淘系和阿里云的前端框架，都是基于React，React-Router和Redux做的二次封装，减少胶水层代码，使得开发人员更加专注于业务开发本身。只有了解了底层库的基本实现原理，才能更好的了解框架的细节。
 针对这些库我基于facebook的create-react-app脚手架做了一个示例工程，把以上提到的这些库通通都使用了一遍，更加能够抽丝剥茧的体会这些库的设计思想和运行原理。
 http://gitlab.alibaba-inc.com/dongni.wx/react-redux-data-streaming
+
+![react表示法](../Images/React/react表示法.png)
+
+React最佳实践：多个component之间发生交互，那么状态就维护在这些Component的最小公约父节点上，即`<App/>`；
+
+`<TodoList />`, `<Todo />`, 以及`<AddTodoBtn />`本身不维持任何state，完全由父节点`<App/>`传入props以决定其展现，是一个纯函数的存在形式，即：`Pure Component`。
+
+![redux表示法](../Images/React/Redux表示法.png)
+React只负责页面渲染，而不负责页面逻辑，页面逻辑可以从中单独抽取出来，变成store。
+
+![redux-saga表示法](../Images/React/redux-saga表示法.png)
+加入redux-saga，使用Middleware拦截action，异步的网络操作，做成一个Middleware就行。
+
+![Dva表示法](../Images/React/Dva表示法.png)
+Dva是基于React+Redux+Saga的最佳实践沉淀。
+1. 把store及saga统一为一个model的概念，写在一个js文件里
+2. 增加了一个Subscriptions，用于收集其他来源的action，比如键盘操作等；
+3. model写法简洁，约定优于配置；

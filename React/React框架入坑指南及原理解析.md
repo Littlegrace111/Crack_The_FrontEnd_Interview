@@ -1,4 +1,5 @@
-## React 是什么？
+## React 简介
+### React 是什么？
 1. UI框架, 视图层框架；
 2. React编程思想: UI组件化，all in JS(css, picture, html all import in js)，响应式编程框架；
 3. 包含React.js / React Native / React VR(360)；
@@ -12,7 +13,7 @@
 10. 单向数据流：父组件可以向子组件传递数据，子组件只能去使用父组件数据(Read-only)，不能改变父组件数据；
 11. react只支持IE8以上的浏览器；
 
-## React 脚手架工具
+### React 脚手架工具
 脚手架工具，前端工程化  
 脚手架工具：webpack，gulp，grunt，yarn(基于node，npm/yarn)  
 react脚手架工具：webpack  
@@ -21,7 +22,6 @@ Create-react-app 创建的项目默认不支持less编译，生成的项目文�
     > 暴露webpack配置文件： `npm run eject`
 
 ## React 编程思想
-
 ### UI组件化-利于代码复用
 - JSX:  把HTML模板嵌入到JS中 (import react 用于编译JSX)
         HTML模板中嵌入JS表达式需要加{} 花括号， 同理注释也用花括号{/**/}；  
@@ -35,21 +35,22 @@ React的设计思想和传统web编程的思想是完全不同的，React是一�
 对于React开发者来说，我们只需要关注数据层的操作就可以了。
 React更新UI界面的方式：Dom节点和数据对象之间建立了一个绑定关系，只需要关注数据对象的变化，Dom界面会被动更新；
 
-## React 渲染原理
-数据发生变化，render函数会重新执行
+## React渲染机制
+`setState`会触发组件re-render。根据React Diff算法的策略，一般情况下父组件的re-render会导致所有子组件re-render（有些特殊情况不会导致），除非子组件使用`shouldComponentUpdate()`来优化。
 
-JSX -> JS 对象(虚拟dom) -> 真实DOM
+另一种例外情况是，如果子组件是`this.props.children`，父组件re-render不会导致子组件re-render。所有嵌套在组件中的JSX结构都可以在组件内部通过`props.children`获取到。
 
-### 最早Web开发更新界面方式：
-1. 数据发生变化；
-2. 获取真实Dom节点；
-3. 用新生成Dom替换原来的Dom；
-
-### 加入字符串模板的更新方式：
-1. 数据Data + 模板 结合 -> 生成真实Dom
-2. 数据变化之后，主动更新；
-3. 数据 + 模板 结合，生成新的模板字符串，存储在DocumentFragment中
-4. 通过innerHTML挂载到真实Dom上；
+### dangerouslySetHTML
+处于安全考虑的因素（XSS攻击），在React当中所有的表达式插入的内容都会被自动转义，就相当于jQuery里面的`text(...)`函数一样，任何的HTML格式都会被转义。直接设置`innerHTML`可能会导致跨站脚本攻击（XSS）。
+```jsx
+  render () {
+    return (
+      <div
+        className='editor-wrapper'
+        dangerouslySetInnerHTML={{__html: this.state.content}} />
+    )
+  }
+```
 
 ### React更新界面方式：
 ![React Render 流程](../Images/React/react-render-process.png)
@@ -60,13 +61,25 @@ JSX -> JS 对象(虚拟dom) -> 真实DOM
 5. 比较原始虚拟Dom和新的虚拟Dom的区别（React Diff 算法）
 6. 只更新变更的Dom节点的内容  
 
-### react key和diff机制
-react的组件diff机制是基于Tree Diff策略，对树进行分层比较（dom跨层级移动操作特别少）。对于同一层级的一组节点，它们可以通过唯一id进行区分。
+## React Key和Diff机制
+### Tree Diff策略
+1. react的组件diff机制是基于Tree Diff策略，对树进行分层比较（dom跨层级移动操作特别少）。
+2. 对于同一层级的一组节点，它们可以通过唯一id进行区分。
+3. 拥有相同类的两个组件将生成相似的树形结构，拥有不同类的两个组件将生成不同的树形结构
 React只会简单的考虑同层级节点的位置变换，而对于不同层级的节点，只有创建和删除操作；
+在开发组件时，保持稳定的**DOM结构的稳定性**会有助于性能的提升。
 
-在开发组件时，保持稳定的DOM结构会有助于性能的提升。
+### Component Diff策略
+1. 如果是同一类型组件，按照原策略继续比较virtual DOM tree；
+2. 如果不是，则将该组件判断为dirty component，从而替换整个组件下的所有子节点；
+3. 对于同一类型的组件，有可能其Virtual DOM没有任何变化，如果能够确切的知道这点那可以节省大量的diff运算时间，因此React允许用户通过`shouldComponentUpdate()`来判断该组件是否需要进行diff；
 
-## React 生命周期 (based on React v15)
+### Element Diff策略
+1. 当节点处于同一层级时，React diff提供三种操作，分别为`INSERT_MARKUP`(插入), `MOVE_EXISTING`(移动), 和`REMOVE_NODE`(删除)。
+2. React通过设置唯一key的策略，对element diff 进行算法优化，避免频繁的删除和插入操作；
+
+## React 生命周期 
+### based on React v15
 ![react v15的生命周期](../Images/React/react-life-cycle-v15.webp)
 1. 初始化阶段：
    - constructor 构造函数
@@ -88,7 +101,7 @@ React只会简单的考虑同层级节点的位置变换，而对于不同层级
 4. 卸载阶段
      - componentWillUnmount
 
-## React 生命周期 (based on React v16)
+### based on React v16
 ![react v16的生命周期](../Images/React/react-life-cycle-v16.webp)
 1. 初始化阶段：
     - constructor 构造函数；
@@ -109,7 +122,7 @@ React只会简单的考虑同层级节点的位置变换，而对于不同层级
 5. 错误处理：
     - componentDidCatch
 
-## react事件机制
+## React事件机制
 React事件并没有绑定在真实的Dom节点上，而是通过事件代理，在最外层的document上对事件进行统一分发，通过`dispatchEvent`循环调用所有层级的事件来模拟事件的冒泡和捕获。
 
 ### React 合成事件 - SyntheticEvent
@@ -258,7 +271,6 @@ setState 第一个参数支持传入一个对象或者一个函数，第二个�
         console.log('[componentDidMount]: state 333', this.state.index);
     }
 ```
-
 1. 直接传递对象的setState会被合并成一次；
 2. 使用函数传递的setState不会被合并；
 
@@ -269,9 +281,14 @@ _assign(nextState, typeof partial === 'function' ? partial call(inst, nextState,
 如果传入的是对象，很明显会被合并成一次，如果传入的是函数，函数的参数preState是前一次合并后的结果，不会被合并。
 
 ### 总结 - 最佳实践
-1. 不推荐直接在`componentDidMount`里直接调用setState（源自官方文档）。原因是，在componentDidMount中，可以立即调用setState()，会触发一次额外的渲染，但是它将在浏览器刷新屏幕之前发生。也就是说，**在componentDidMount中直接调用setState很可能会造成界面的卡顿和丢帧，会导致一些性能问题。** 推荐，在constructor中使用赋值初始态来替代。
+1. 不推荐直接在`componentDidMount`里直接调用setState（源自官方文档）。原因是，在componentDidMount中，立即直接调用setState()（不是放在异步任务里面调用），会触发一次额外的渲染，但是它将在浏览器刷新屏幕之前发生。也就是说，**在componentDidMount中直接调用setState很可能会造成界面的卡顿和丢帧，会导致一些性能问题。** 推荐，在constructor中使用赋值初始态来替代。
 2. 不能在`componentWillUpdate` 和 `componentDidUpdate` 这两个生命周期中不能调用setState，会造成死循环，导致程序崩溃。
 3. react会对多次连续的setState（参数为对象）进行合并，如果你想立即使用上次setState后的结果进行下一次setState，可以让setState接收一个函数而不是一个对象。这个函数用上一个state作为第一个参数，将此次更新时的state作为第二个参数。
 
 源自此文章：https://mp.weixin.qq.com/s/vDJ_Txm4wi-cMVlX5xypLg
 
+## 探究Virtual Dom的原理
+`Virtual Dom`的优势在于React的Diff算法和批处理策略，React在页面更新之前，提前计算好了如何进行更新和渲染DOM。这个计算过程在开发者直接操作DOM时，也是可以自己判断和实现的。
+所以，`Virtual Dom`并不一定比普通Dom快。我更倾向于说，`Virtual Dom`帮助开发者提高了开发效率，使得开发者不需要去关心在重复渲染界面的时候，如何计算是更高效的更新，react帮助开发者做了这件事情，开发者可以更加专注于业务开发。
+
+## 为何要在component

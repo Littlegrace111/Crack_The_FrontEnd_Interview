@@ -28,10 +28,9 @@ state：负责存储组件里面的数据 ;
 setState方法：改变数据，数据变化需要深拷贝deepclone  
 组件元素的事件绑定: onXXXX.bind(this) 改变事件函数的作用域
 
-> {/**dangerouslySetInnerHTML  不转义html， 但是可能会存在xss攻击风险，如果有此需求，可以用dangerouslySetInnertHTML实现*/}
+> {/*dangerouslySetInnerHTML  不转义html， 但是可能会存在xss攻击风险，如果有此需求，可以用dangerouslySetInnertHTML实现*/}
 
 > React 关于数据变化的设计思想：immutable，state 不允许我们做任何改变，改变使用深拷贝，否则会影响react的性能优化。
-
 
 ## 使用React提供的context api
 Context是React提供的一种组件树”全局“通信方式。从v16.3.0开始，React开始提供官方的context接口；

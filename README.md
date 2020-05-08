@@ -23,7 +23,7 @@ Pain is inevitable, suffering is optional.
 - [ ] [面向对象之创建对象多种方式]()
 - [x] [面向对象之继承的多种方式](./Code/Javascript/extends.js)
 - [ ] [函数编程之异步编程](./Javascript/函数编程之异步编程.md)
-- [ ] [数组去重]
+- [ ] [数组去重](./Code/Algorithm/array_unique.js)
 
 #### ES6
 

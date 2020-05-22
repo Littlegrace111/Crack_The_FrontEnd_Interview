@@ -85,19 +85,26 @@ useEffect(() => {
 
 ## memo, useMemo 和 useCallback
 
-useCallback, useMemo 主要是用来针对组件做优化。
+useCallback, useMemo 主要是用来针对函数组件做优化。
 由于 React 的 diff 策略，是进行逐层比较，如果父组件发生了变化，会直接替换父组件和父组件以下所有的子组件的节点，那么则就会造成一定的 dirty diff。所以 React 提供一个生命周期函数 `shouldComponentUpdate` 来解决组件冗余渲染的问题。
 
-shouldComponentUpdate pureComponent。
 在 React 之前的版本中，React 给类组件提供了一个`PureComponent`类，用于组件的性能优化。`PureComponent`原理就是自动加载了 shouldComponentUpdate 函数，当组件更新时，shouldComponentUpdated 对 props 和 state 进行了一层 shallow compare 浅比较，返回 true 则不会触发 render 函数，省去 Virtual Dom 生成和对比的过程，从而提升性能。
 
-### memo
+### React.memo
 
-memo 是一个高阶组件，用于包裹一个函数组件，实现类似于 `shouldComponentUpdate` 和 `pureComponent` 类似的功能；
+当父组件引入一个子组件，且子组件上没有绑定父组件的 props，如果父组件的状态更新，子组件也会更新。这个时候可以引入 React.memo 来解决子组件冗余更新的问题。
 
-### 了解什么是浅比较 shallowEqual？
+memo 是一个高阶组件，用于包裹一个**函数组件**，实现类似于 `shouldComponentUpdate` 和 `pureComponent` 类似的功能。
+React.memo 的第一个参数传入一个函数组件，完成类似 class 组件 pureComponent 的功能，第二个参数可选，传入一个回调函数，这个回调函数的功能类似于 shouldComponentUpdate，用于更加精细化的控制 props 的比较。React.memo 如果传入第二个参数，则 props 浅比较的功能就失效了。
 
-https://imweb.io/topic/598973c2c72aa8db35d2e291
+![了解什么是浅比较 shallowEqual？](https://imweb.io/topic/598973c2c72aa8db35d2e291)
+
+### useMemo 与 useCallback
+
+React.memo 的作用类似于 pureComponent 的作用，只能对 props 进行浅比较。如果子组件的 props 是一个原始数据类型，shallow compare 可以解决比较的问题，如果 props 的某个属性本身是一个复杂数据类型，比如数组，对象，函数这三种类型，靠 React.memo 无法满足这些场景。
+
+useMemo 和 useCallback 的用法和 useEffect 基本是一致的。
+useMemo 是作用于 props 属性的，props 的某个属性发生变化时，才返回一个新的对象，否则会把这个对象缓存起来。
 
 ## 自定义 hooks
 

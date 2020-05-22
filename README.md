@@ -27,6 +27,8 @@ Pain is inevitable, suffering is optional.
 
 #### ES6
 
+- [x] [Promise 的使用](./Code/Javascript/promise.js)
+
 #### 应用
 
 ### CSS

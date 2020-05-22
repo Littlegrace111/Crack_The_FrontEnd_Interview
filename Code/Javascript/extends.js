@@ -19,6 +19,10 @@ function Child(name, parent) {
 	this.name = name;
 }
 
+/**
+ * 函数的原型是一个对象：func.prototype,
+ * 是由JS引擎在函数创建的时候添加的，这个对象包含一个constructor构造函数和__proto__属性，__proto__属性指向他的上一个原型
+ */
 // Child.prototype = new Parent(); // 会调用两次父类的构造函数
 Child.prototype = Object.create(Parent.prototype); // 使用此方法就不会调用两次父类构造函数
 Child.prototype.constructor = Child; // 必须加的，如果不加，就没有绑定构造函数
@@ -29,7 +33,7 @@ console.log(child1);
 
 //模拟Object.create
 function createObject(obj) {
-    function f() {}
-    f.prototype = obj
-    return new f();
+	function f() {}
+	f.prototype = obj;
+	return new f();
 }

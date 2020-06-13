@@ -32,6 +32,7 @@
 	const obj = {
 		start: [1, 2, 3],
 		end: [7, 8, 9],
+		// 自定义迭代器函数，迭代器是一个函数，这个函数会返回一个next函数，next函数会返回一个对象包含value和done属性。
 		// 这种写法等价于: [Symbol.iterator]() {}
 		[Symbol.iterator]: function () {
 			const self = this;
@@ -58,4 +59,21 @@
 	for (let key of obj) {
 		console.log(key);
 	}
+}
+
+/**
+ * Generator 是一个函数，可以理解成Generator函数内部维护了一个状态机，封装了多个内部状态。
+ * 执行Generator函数会返回一个遍历器对象，Generator函数除了是一个状态机，还是一个遍历器生成函数，通过返回的遍历器对象，可以不断遍历Generator函数内部的每一个状态。
+ * async 和 await是generator的语法糖，* 和 yield。
+ */
+{
+	function* helloworld() {
+		yield "hello";
+		yield "world";
+		return "ending";
+	}
+
+	// generator 函数执行，返回的并不是函数的运行结果，而是一个迭代器对象
+	var hw = helloworld(); // generator 函数返回一个迭代器对象
+	console.log(hw.next().value);
 }

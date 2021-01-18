@@ -38,6 +38,10 @@ promiseAll([p1, p2, p3]).then((results) => {
 	console.log(results);
 });
 
+
+
+
+
 function promiseRace(promises) {
 	let promiseCount = 0;
 	return new Promise((resolve, reject) => {

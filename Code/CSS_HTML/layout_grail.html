@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>圣杯布局</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style type="text/css">
+            body {
+                min-width: 550px;
+            }
+            #header {
+                text-align: center;
+                background-color: #f1f1f1;
+            }
+            #container {
+                padding-left: 200px;
+                padding-right: 150px;
+                /* overflow: hidden 形成BFC */
+                /* overflow: hidden; */
+            }
+
+            #container .column {
+                float: left;
+            }
+
+            #center {
+                background-color: #ccc;
+                width: 100%;
+            }
+            #left {
+                position: relative;
+                background-color: yellow;
+                width: 200px;
+                /* margin-left: -100% 很重要，实现 */
+                margin-left: -100%;
+                right: 200px;
+            }
+            #right {
+                background-color: red;
+                width: 150px;
+                /* margin-right: -150px; */
+                margin-right: -150px;
+            }
+            #footer {
+                /* 清除浮动带来的副作用 */
+                /* clear: both; */
+                text-align: center;
+                background-color: #f1f1f1;
+            }
+            
+            /* 手写clearfix */
+            .clearfix:after {
+                content: '';
+                display: table;
+                clear: both;
+            }
+            .clearfix {
+                /* 兼容 ie 低版本 */
+                zoom: 1; 
+            }
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div id="header">this is header</div>
+        <div id="container" class="clearfix">
+            <div id="center" class="column">this is center center center center center center center </div>
+            <div id="left" class="column">this is left this is left this is left</div>
+            <div id="right" class="column">this is right right right right right right right right right right </div>
+        </div>
+        <div id="footer">this is footer</div>
+        <script src="" async defer></script>
+    </body>
+</html>
